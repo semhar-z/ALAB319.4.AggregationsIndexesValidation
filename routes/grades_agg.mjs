@@ -89,6 +89,8 @@ router.get("/learner/:id/avg", async (req, res) => {
       .aggregate([
         {
           $match: { learners_id: Number(req.params.id) },
+        },
+        {
           $unwind: "$scores",
         },
         {
@@ -163,7 +165,10 @@ router.get("/learner/:id/avg", async (req, res) => {
 
 // Create a GET route at /grades/stats
 router.get("/grades/stats", async (req, res) => {
+  console.log("Route hit: /grades/stats");
+  
   try {
+    console.log("Database connected:", !!db);
     const collection = await db.collection("grades");
 
     const result = await collection
@@ -332,6 +337,5 @@ async function setValidationRules() {
 }
 
 setValidationRules();
-
 
 export default router;
